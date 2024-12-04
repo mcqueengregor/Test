@@ -4,22 +4,30 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    [Header("Obstacles data:")]
     [SerializeField] private GameObject ObstaclePrefab;
     [SerializeField] private GameObject ObstaclesParent;
+    [SerializeField] private int numObstacles;
 
     [SerializeField] private GameObject FloorPlaneObject;
 
-    [SerializeField] private GameObject PlayerPrefab;
+    [Header("Obstacles data:")]
+    [SerializeField] private PlayerController PlayerRef;
 
-    [SerializeField] private PlayerController Player;
 
-    [SerializeField] private int numObstacles;
+    private List<GameObject> obstacles = new List<GameObject>();
 
-    private List<GameObject> obstacles;
+    [SerializeField] private GameObject[] Destinations;
 
     private void Awake()
     {
         SpawnObstacles();
+    }
+
+    private void Start()
+    {
+        foreach (var d in Destinations)
+            PlayerRef.AddDestination(d.transform.position);
     }
 
     private void SpawnObstacles()
