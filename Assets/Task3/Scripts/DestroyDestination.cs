@@ -2,15 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DestroyDestination : MonoBehaviour
+public class DisableDestination : MonoBehaviour
 {
-    public void DestroySelf()
+    public void DisableSelf()
     {
-        Destroy(this);
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        Debug.Log("Working!");
+        transform.gameObject.SetActive(false);
     }
 }

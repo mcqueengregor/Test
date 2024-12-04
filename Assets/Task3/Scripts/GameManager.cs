@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private PlayerController PlayerRef;
 
 
-    private List<GameObject> obstacles = new List<GameObject>();
+    private List<GameObject> Obstacles = new List<GameObject>();
 
     [SerializeField] private GameObject[] Destinations;
 
@@ -28,6 +28,24 @@ public class GameManager : MonoBehaviour
     {
         foreach (var d in Destinations)
             PlayerRef.AddDestination(d.transform.position);
+    }
+
+    public void ResetGame()
+    {
+        PlayerRef.ResetPlayer();
+
+        // Reactivate destination objects, destroy old obstacles and generate new ones:
+        foreach (var d in Destinations)
+        {
+            d.gameObject.SetActive(true);
+            PlayerRef.AddDestination(d.transform.position);
+        }
+        foreach (var o in Obstacles)
+        {
+            Destroy(o.gameObject);
+        }
+        Obstacles.Clear();
+        SpawnObstacles();
     }
 
     private void SpawnObstacles()
@@ -50,7 +68,7 @@ public class GameManager : MonoBehaviour
             GameObject newObstacle = Instantiate(ObstaclePrefab, ObstaclesParent.transform);
             newObstacle.transform.position = spawnPos;
 
-            obstacles.Add(newObstacle);
+            Obstacles.Add(newObstacle);
         }
     }
 }
