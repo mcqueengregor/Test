@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
 
     private AudioSource SoundEffect;    // "Game Start" by "freesound_community" (https://pixabay.com/sound-effects/search/game/)
     private ParticleSystem WinLoseParticleSystem;
-    private MeshRenderer CylinderMesh;
+    private MeshRenderer[] Meshes;
 
     private List<Vector3> Destinations = new List<Vector3>();
     private Vector3 CurrentDestination;
@@ -19,6 +19,7 @@ public class PlayerController : MonoBehaviour
         SoundEffect = GetComponent<AudioSource>();
         WinLoseParticleSystem = GetComponent<ParticleSystem>();
         WinLoseParticleSystem.Stop();
+        Meshes = GetComponentsInChildren<MeshRenderer>();
     }
 
     // Update is called once per frame
@@ -37,7 +38,9 @@ public class PlayerController : MonoBehaviour
         transform.position = Vector3.zero;
         Destinations.Clear();
         WinLoseParticleSystem.Stop();
-        CylinderMesh.enabled = true;
+
+        foreach (var m in Meshes)
+            m.enabled = true;
     }
 
     // Register destination to move towards on XZ plane:
@@ -55,18 +58,22 @@ public class PlayerController : MonoBehaviour
     // Remove first element of destinations list and target next destination, if there are any left:
     public void OnDestinationReached()
     {
-        Destinations.RemoveAt(0);
-
         if (Destinations.Count > 0)
         {
-            CurrentDestination = Destinations[0];
-            FaceDestination();
-        }
-        else
-        {
-            SoundEffect.Play();
-            StartParticleEffect();
-            Debug.Log("All destinations reached!");
+            Destinations.RemoveAt(0);
+
+            // If there is still a point to move towards, aim for it, otherwise disable player mesh:
+            if (Destinations.Count != 0)
+            {
+                CurrentDestination = Destinations[0];
+                FaceDestination();
+            }
+            else
+            {
+                SoundEffect.Play();
+                StartParticleEffect();
+                Debug.Log("All destinations reached!");
+            }
         }
     }
 
@@ -81,7 +88,9 @@ public class PlayerController : MonoBehaviour
 
     private void StartParticleEffect()
     {
-        CylinderMesh.enabled = false;
+        foreach (var m in Meshes)
+            m.enabled = false;
+
         WinLoseParticleSystem.Play();
     }
 

@@ -8,16 +8,14 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject ObstaclePrefab;
     [SerializeField] private GameObject ObstaclesParent;
     [SerializeField] private int numObstacles;
-
-    [SerializeField] private GameObject FloorPlaneObject;
-
-    [Header("Obstacles data:")]
-    [SerializeField] private PlayerController PlayerRef;
-
-
     private List<GameObject> Obstacles = new List<GameObject>();
 
+    [Header("World data:")]
     [SerializeField] private GameObject[] Destinations;
+    [SerializeField] private GameObject FloorPlaneObject;
+
+    [Header("Player data:")]
+    [SerializeField] private PlayerController PlayerRef;
 
     private void Awake()
     {
