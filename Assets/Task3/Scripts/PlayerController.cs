@@ -6,10 +6,20 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float MoveSpeed = 1;
     [SerializeField] private LayerMask ObstacleLayer;
-    private AudioSource soundEffect;    // "Game Start" by "freesound_community" (https://pixabay.com/sound-effects/search/game/)
+
+    private AudioSource SoundEffect;    // "Game Start" by "freesound_community" (https://pixabay.com/sound-effects/search/game/)
+    private ParticleSystem WinLoseParticleSystem;
+    private MeshRenderer CylinderMesh;
 
     private List<Vector3> Destinations = new List<Vector3>();
     private Vector3 CurrentDestination;
+
+    private void Awake()
+    {
+        SoundEffect = GetComponent<AudioSource>();
+        WinLoseParticleSystem = GetComponent<ParticleSystem>();
+        WinLoseParticleSystem.Stop();
+    }
 
     // Update is called once per frame
     void Update()
@@ -26,6 +36,8 @@ public class PlayerController : MonoBehaviour
     {
         transform.position = Vector3.zero;
         Destinations.Clear();
+        WinLoseParticleSystem.Stop();
+        CylinderMesh.enabled = true;
     }
 
     // Register destination to move towards on XZ plane:
@@ -44,10 +56,17 @@ public class PlayerController : MonoBehaviour
     public void OnDestinationReached()
     {
         Destinations.RemoveAt(0);
+
         if (Destinations.Count > 0)
         {
             CurrentDestination = Destinations[0];
             FaceDestination();
+        }
+        else
+        {
+            SoundEffect.Play();
+            StartParticleEffect();
+            Debug.Log("All destinations reached!");
         }
     }
 
@@ -60,12 +79,19 @@ public class PlayerController : MonoBehaviour
         transform.rotation = newRot;
     }
 
+    private void StartParticleEffect()
+    {
+        CylinderMesh.enabled = false;
+        WinLoseParticleSystem.Play();
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("OnCollisionEnter called!");
         if (collision.gameObject.layer == ObstacleLayer)
         {
             Debug.Log("Hit an obstacle!");
+            SoundEffect.Play();
+            StartParticleEffect();
         }
     }
 

@@ -396,6 +396,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 8209987020404753201, guid: 21fabb267e5f8124c9293f22aa543ef7, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: deb0b48ada830a4459214878343566cb, type: 2}
+    - target: {fileID: 8290319960520262163, guid: 21fabb267e5f8124c9293f22aa543ef7, type: 3}
+      propertyPath: MoveSpeed
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 8851426134896592032, guid: 21fabb267e5f8124c9293f22aa543ef7, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
@@ -484,7 +492,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 7ffea927847fdec4baf40cb6c18f4c9b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
