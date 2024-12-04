@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField] private GameManager GameManagerRef;
     [SerializeField] private float MoveSpeed = 1;
-    [SerializeField] private LayerMask ObstacleLayer;
 
     private AudioSource SoundEffect;    // "Game Start" by "freesound_community" (https://pixabay.com/sound-effects/search/game/)
     private ParticleSystem WinLoseParticleSystem;
@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
 
     private List<Vector3> Destinations = new List<Vector3>();
     private Vector3 CurrentDestination;
+
 
     private void Awake()
     {
@@ -82,6 +83,7 @@ public class PlayerController : MonoBehaviour
             else
             {
                 Debug.Log("All destinations reached!");
+                GameManagerRef.OnGameWin();
                 DisablePlayer();
             }
         }
@@ -106,6 +108,7 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.CompareTag("Obstacle"))
         {
             Debug.Log("Hit an obstacle!");
+            GameManagerRef.OnGameLose();
             DisablePlayer();
         }
     }

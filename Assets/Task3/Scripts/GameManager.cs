@@ -17,6 +17,10 @@ public class GameManager : MonoBehaviour
     [Header("Player data:")]
     [SerializeField] private PlayerController PlayerRef;
 
+    [Header("Misc. data:")]
+    [SerializeField] private TMPro.TMP_Text WinText;
+    [SerializeField] private TMPro.TMP_Text LoseText;
+
     private void Awake()
     {
         SpawnObstacles();
@@ -45,6 +49,9 @@ public class GameManager : MonoBehaviour
         }
         Obstacles.Clear();
         SpawnObstacles();
+
+        WinText.gameObject.SetActive(false);
+        LoseText.gameObject.SetActive(false);
     }
 
     private void SpawnObstacles()
@@ -70,5 +77,15 @@ public class GameManager : MonoBehaviour
 
             Obstacles.Add(newObstacle);
         }
+    }
+
+    public void OnGameWin()
+    {
+        WinText.gameObject.SetActive(true);
+    }
+
+    public void OnGameLose()
+    {
+        LoseText.gameObject.SetActive(true);
     }
 }
