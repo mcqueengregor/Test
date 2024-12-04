@@ -9,9 +9,13 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private GameObject FloorPlaneObject;
 
+    [SerializeField] private GameObject PlayerPrefab;
+
+    [SerializeField] private PlayerController Player;
+
     [SerializeField] private int numObstacles;
 
-    List<GameObject> obstacles;
+    private List<GameObject> obstacles;
 
     private void Awake()
     {
@@ -28,11 +32,17 @@ public class GameManager : MonoBehaviour
             // Use floor's scale as the bounds for where obstacles can spawn, move spawn location to floor's position:
             Vector3 floorPlaneScale = FloorPlaneObject.transform.localScale * 0.5f;
 
-            Vector3 spawnPos = new Vector3(randomPos.x * floorPlaneScale.x, 2f, randomPos.z * floorPlaneScale.z);
+            Vector3 spawnPos = new Vector3(
+                randomPos.x * floorPlaneScale.x,
+                FloorPlaneObject.transform.position.y + 10f,
+                randomPos.z * floorPlaneScale.z);
+
             spawnPos += FloorPlaneObject.transform.position;
 
             GameObject newObstacle = Instantiate(ObstaclePrefab, ObstaclesParent.transform);
             newObstacle.transform.position = spawnPos;
+
+            obstacles.Add(newObstacle);
         }
     }
 }
