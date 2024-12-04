@@ -38,9 +38,20 @@ public class PlayerController : MonoBehaviour
         transform.position = Vector3.zero;
         Destinations.Clear();
         WinLoseParticleSystem.Stop();
+        WinLoseParticleSystem.Clear();
 
         foreach (var m in Meshes)
             m.enabled = true;
+    }
+
+    private void DisablePlayer()
+    {
+        foreach (var m in Meshes)
+            m.enabled = false;
+
+        SoundEffect.Play();
+        StartParticleEffect();
+        enabled = false;
     }
 
     // Register destination to move towards on XZ plane:
@@ -62,7 +73,7 @@ public class PlayerController : MonoBehaviour
         {
             Destinations.RemoveAt(0);
 
-            // If there is still a point to move towards, aim for it, otherwise disable player mesh:
+            // If there is still a point to move towards, aim for it, otherwise disable player meshes and script:
             if (Destinations.Count != 0)
             {
                 CurrentDestination = Destinations[0];
@@ -70,9 +81,8 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                SoundEffect.Play();
-                StartParticleEffect();
                 Debug.Log("All destinations reached!");
+                DisablePlayer();
             }
         }
     }
@@ -88,19 +98,15 @@ public class PlayerController : MonoBehaviour
 
     private void StartParticleEffect()
     {
-        foreach (var m in Meshes)
-            m.enabled = false;
-
         WinLoseParticleSystem.Play();
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.layer == ObstacleLayer)
+        if (collision.gameObject.CompareTag("Obstacle"))
         {
             Debug.Log("Hit an obstacle!");
-            SoundEffect.Play();
-            StartParticleEffect();
+            DisablePlayer();
         }
     }
 

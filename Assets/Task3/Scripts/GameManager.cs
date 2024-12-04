@@ -30,6 +30,7 @@ public class GameManager : MonoBehaviour
 
     public void ResetGame()
     {
+        PlayerRef.enabled = true;
         PlayerRef.ResetPlayer();
 
         // Reactivate destination objects, destroy old obstacles and generate new ones:
@@ -65,6 +66,7 @@ public class GameManager : MonoBehaviour
 
             GameObject newObstacle = Instantiate(ObstaclePrefab, ObstaclesParent.transform);
             newObstacle.transform.position = spawnPos;
+            newObstacle.tag = "Obstacle";   // Manually set tag since instantation of new objects doesn't copy tags
 
             Obstacles.Add(newObstacle);
         }
