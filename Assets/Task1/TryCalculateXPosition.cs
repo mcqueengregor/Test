@@ -30,7 +30,24 @@ public class TryCalculateXPosition
 
         float xDisplacement = v.x * t + 0.5f * G * (t * t);
 
-        // Take rectangule into account and determine how many times the ball bounces off each side:
+        // Calculate the remianing amount of x-displacement after final bounce (use different formula depending on sign of starting x-velocity):
+        int numBounces = v.x > 0 ?
+            Mathf.FloorToInt((p.x + Mathf.Abs(xDisplacement)) / w) :
+            Mathf.FloorToInt((w - p.x) + Mathf.Abs(xDisplacement) / w);
+        float displacementAfterBounces = p.x + xDisplacement - (numBounces * w);
+
+        if (numBounces % 2 == 0)
+        {
+            xPosition = displacementAfterBounces - p.x;
+        }
+        else
+        {
+            xPosition = w - p.x - displacementAfterBounces;
+        }
+
+        // The above assumes that the ball started moving in the +ve x-direction away from the origin, if it wasn't then simply invert the final result:
+        if (v.x < 0)
+            xPosition = w - xPosition;
 
         return true;
     }
