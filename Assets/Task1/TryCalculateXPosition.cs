@@ -34,20 +34,30 @@ public class TryCalculateXPosition
         int numBounces = v.x > 0 ?
             Mathf.FloorToInt((p.x + Mathf.Abs(xDisplacement)) / w) :
             Mathf.FloorToInt((w - p.x) + Mathf.Abs(xDisplacement) / w);
-        float displacementAfterBounces = p.x + xDisplacement - (numBounces * w);
+        
+        // Determine final ball position on x-axis after all bounces (based on number of bounces and sign of 'v.x'):
+        float displacementAfterBounces;
 
-        if (numBounces % 2 == 0)
+        if (numBounces % 2 == 0 && v.x > 0f)        // Ball starts moving in +ve x-direction and bounces an even number of times (final bounce is from the left)
         {
-            xPosition = displacementAfterBounces - p.x;
+            displacementAfterBounces = p.x + xDisplacement - (numBounces * w);
+            xPosition = displacementAfterBounces;
         }
-        else
+        else if (numBounces % 2 != 0 && v.x > 0f)   // Ball starts moving in +ve x-direction and bounces an odd number of times (final bounce is from the right)
         {
-            xPosition = w - p.x - displacementAfterBounces;
+            displacementAfterBounces = p.x + xDisplacement - (numBounces * w);
+            xPosition = w - displacementAfterBounces;
         }
-
-        // The above assumes that the ball started moving in the +ve x-direction away from the origin, if it wasn't then simply invert the final result:
-        if (v.x < 0)
-            xPosition = w - xPosition;
+        else if (numBounces % 2 == 0 && v.x <= 0f)  // Ball starts moving in -ve x-direction and bounces an even number of times (final bounce is from the right)
+        {
+            displacementAfterBounces = (w - p.x) + xDisplacement - (numBounces * w);
+            xPosition = w - displacementAfterBounces;
+        }
+        else                                        // Ball starts moving in -ve x-direction and bounces an odd number of times (final bounce is from the left)
+        {
+            displacementAfterBounces = (w - p.x) + xDisplacement - (numBounces * w);
+            xPosition = displacementAfterBounces;
+        }
 
         return true;
     }
